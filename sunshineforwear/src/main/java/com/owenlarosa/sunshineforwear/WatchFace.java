@@ -131,7 +131,7 @@ public class WatchFace extends CanvasWatchFaceService {
             mYOffset = resources.getDimension(R.dimen.digital_y_offset);
 
             mBackgroundPaint = new Paint();
-            mBackgroundPaint.setColor(resources.getColor(R.color.background));
+            mBackgroundPaint.setColor(resources.getColor(R.color.sunshine_color_primary));
 
             mTimePaint = createTextPaint(resources.getColor(R.color.digital_text));
             mTimePaint.setTextAlign(Paint.Align.CENTER);
