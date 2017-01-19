@@ -268,7 +268,7 @@ public class WatchFace extends CanvasWatchFaceService {
             canvas.drawText(timeText, bounds.width()/2, mYOffset, mTimePaint);
 
             String dateText = String.format("%s, %s %d %d",
-                    mCalendar.get(Calendar.DAY_OF_WEEK),
+                    Utils.getDayString(mCalendar.get(Calendar.DAY_OF_WEEK)),
                     mCalendar.get(Calendar.MONTH),
                     mCalendar.get(Calendar.DAY_OF_MONTH),
                     mCalendar.get(Calendar.YEAR));
