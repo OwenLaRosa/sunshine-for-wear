@@ -40,6 +40,7 @@ import java.util.Calendar;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
+import static android.R.attr.digits;
 import static android.R.attr.textSize;
 
 /**
@@ -107,6 +108,9 @@ public class WatchFace extends CanvasWatchFaceService {
         };
         float mXOffset;
         float mYOffset;
+
+        // starting point to draw the text that shows the date
+        float mDateTextStartY;
 
         /**
          * Whether the display supports fewer bits for each color in ambient mode. When true, we
@@ -199,14 +203,20 @@ public class WatchFace extends CanvasWatchFaceService {
             boolean isRound = insets.isRound();
             mXOffset = resources.getDimension(isRound
                     ? R.dimen.digital_x_offset_round : R.dimen.digital_x_offset);
-            mTimePaint.setTextSize(resources.getDimension(isRound
-                    ? R.dimen.time_text_size_round : R.dimen.time_text_size));
-            mDatePaint.setTextSize(resources.getDimension(isRound ?
-                    R.dimen.date_text_size_round : R.dimen.date_text_size));
+            float textYInterSpace = resources.getDimension(R.dimen.text_y_inter_space);
+
+            float timePaintSize = resources.getDimension(isRound
+                    ? R.dimen.time_text_size_round : R.dimen.time_text_size);
+            mTimePaint.setTextSize(timePaintSize);
+            float datePaintSize = resources.getDimension(isRound ?
+                    R.dimen.date_text_size_round : R.dimen.date_text_size);
+            mDatePaint.setTextSize(datePaintSize);
             float tempPaintSize = resources.getDimensionPixelSize(isRound
                     ? R.dimen.temp_text_size_round : R.dimen.temp_text_size);
             mHighTempPaint.setTextSize(tempPaintSize);
             mLowTempPaint.setTextSize(tempPaintSize);
+
+            mDateTextStartY = mYOffset + timePaintSize + textYInterSpace;
         }
 
         @Override
@@ -250,12 +260,19 @@ public class WatchFace extends CanvasWatchFaceService {
             long now = System.currentTimeMillis();
             mCalendar.setTimeInMillis(now);
 
-            String text = mAmbient
+            String timeText = mAmbient
                     ? String.format("%d:%02d", mCalendar.get(Calendar.HOUR),
                     mCalendar.get(Calendar.MINUTE))
                     : String.format("%d:%02d:%02d", mCalendar.get(Calendar.HOUR),
                     mCalendar.get(Calendar.MINUTE), mCalendar.get(Calendar.SECOND));
-            canvas.drawText(text, bounds.width()/2, mYOffset, mTimePaint);
+            canvas.drawText(timeText, bounds.width()/2, mYOffset, mTimePaint);
+
+            String dateText = String.format("%s, %s %d %d",
+                    mCalendar.get(Calendar.DAY_OF_WEEK),
+                    mCalendar.get(Calendar.MONTH),
+                    mCalendar.get(Calendar.DAY_OF_MONTH),
+                    mCalendar.get(Calendar.YEAR));
+            canvas.drawText(dateText, bounds.width()/2, mDateTextStartY, mDatePaint);
         }
 
         /**
