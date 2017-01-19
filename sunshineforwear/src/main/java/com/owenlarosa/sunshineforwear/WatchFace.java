@@ -124,6 +124,7 @@ public class WatchFace extends CanvasWatchFaceService {
 
             mTextPaint = new Paint();
             mTextPaint = createTextPaint(resources.getColor(R.color.digital_text));
+            mTextPaint.setTextAlign(Paint.Align.CENTER);
 
             mCalendar = Calendar.getInstance();
         }
@@ -239,7 +240,7 @@ public class WatchFace extends CanvasWatchFaceService {
                     mCalendar.get(Calendar.MINUTE))
                     : String.format("%d:%02d:%02d", mCalendar.get(Calendar.HOUR),
                     mCalendar.get(Calendar.MINUTE), mCalendar.get(Calendar.SECOND));
-            canvas.drawText(text, mXOffset, mYOffset, mTextPaint);
+            canvas.drawText(text, bounds.width()/2, mYOffset, mTextPaint);
         }
 
         /**
