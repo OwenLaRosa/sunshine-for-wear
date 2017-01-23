@@ -122,6 +122,8 @@ public class WatchFace extends CanvasWatchFaceService {
 
         // vertical space between the line separator and high/low text
         float mWeatherVerticalOffset;
+        // horizontal space between high/low temp and weather graphic
+        float mWeatherHorizontalOffset;
 
         /**
          * Whether the display supports fewer bits for each color in ambient mode. When true, we
@@ -240,6 +242,7 @@ public class WatchFace extends CanvasWatchFaceService {
 
             mSeparatorStrokeLength = resources.getDimension(R.dimen.line_separator_stroke_length);
             mWeatherVerticalOffset = resources.getDimension(R.dimen.weather_text_vertical_offset);
+            mWeatherHorizontalOffset = resources.getDimension(R.dimen.weather_text_horizontal_offset);
         }
 
         @Override
@@ -308,6 +311,12 @@ public class WatchFace extends CanvasWatchFaceService {
                     bounds.width()/2,
                     bounds.height()/2 + mLowTempPaint.getTextSize() + mWeatherVerticalOffset,
                     mLowTempPaint);
+
+            String highText = "20";
+            canvas.drawText(highText,
+                    bounds.width()/2 - mWeatherHorizontalOffset,
+                    bounds.height()/2 + mHighTempPaint.getTextSize() + mWeatherVerticalOffset,
+                    mHighTempPaint);
         }
 
         /**

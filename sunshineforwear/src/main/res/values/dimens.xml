@@ -9,6 +9,8 @@
     <dimen name="text_y_inter_space">4dp</dimen>
     <!-- space inbetween line separator (screen center) and high/low text -->
     <dimen name="weather_text_vertical_offset">16dp</dimen>
+    <!-- horizontal space between high/low temp and weather graphic -->
+    <dimen name="weather_text_horizontal_offset">40dp</dimen>
     <dimen name="digital_x_offset">15dp</dimen>
     <dimen name="digital_x_offset_round">25dp</dimen>
     <dimen name="digital_y_offset">60dp</dimen>
