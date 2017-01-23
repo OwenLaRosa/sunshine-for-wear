@@ -135,7 +135,7 @@ public class WatchFace extends CanvasWatchFaceService {
 
             mTimePaint = createTextPaint(resources.getColor(R.color.digital_text));
             mTimePaint.setTextAlign(Paint.Align.CENTER);
-            mDatePaint = createTextPaint(resources.getColor(R.color.digital_subtext));
+            mDatePaint = createTextPaint(resources.getColor(R.color.digital_text));
             mDatePaint.setTextAlign(Paint.Align.CENTER);
             mHighTempPaint = createTextPaint(resources.getColor(R.color.digital_text));
             mLowTempPaint = createTextPaint(resources.getColor(R.color.digital_text));
