@@ -111,11 +111,17 @@ public class WatchFace extends CanvasWatchFaceService {
         float mXOffset;
         float mYOffset;
 
+        // vertical space inbetween text elements
+        float mTextYInterSpace;
+
         // starting point to draw the text that shows the date
         float mDateTextStartY;
 
         // horizontal length for line separator between date and weather
         float mSeparatorStrokeLength;
+
+        // vertical space between the line separator and high/low text
+        float mWeatherVerticalOffset;
 
         /**
          * Whether the display supports fewer bits for each color in ambient mode. When true, we
@@ -144,6 +150,7 @@ public class WatchFace extends CanvasWatchFaceService {
             mDatePaint.setTextAlign(Paint.Align.CENTER);
             mHighTempPaint = createTextPaint(resources.getColor(R.color.digital_text));
             mLowTempPaint = createTextPaint(resources.getColor(R.color.digital_text));
+            mLowTempPaint.setTextAlign(Paint.Align.CENTER);
             mSeparatorPaint = createSeparatorPaint(resources.getColor(R.color.white),
                     resources.getDimension(R.dimen.line_separator_stroke_width));
 
@@ -216,7 +223,7 @@ public class WatchFace extends CanvasWatchFaceService {
             boolean isRound = insets.isRound();
             mXOffset = resources.getDimension(isRound
                     ? R.dimen.digital_x_offset_round : R.dimen.digital_x_offset);
-            float textYInterSpace = resources.getDimension(R.dimen.text_y_inter_space);
+            mTextYInterSpace = resources.getDimension(R.dimen.text_y_inter_space);
 
             float timePaintSize = resources.getDimension(isRound
                     ? R.dimen.time_text_size_round : R.dimen.time_text_size);
@@ -229,9 +236,10 @@ public class WatchFace extends CanvasWatchFaceService {
             mHighTempPaint.setTextSize(tempPaintSize);
             mLowTempPaint.setTextSize(tempPaintSize);
 
-            mDateTextStartY = mYOffset + timePaintSize + textYInterSpace;
+            mDateTextStartY = mYOffset + timePaintSize + mTextYInterSpace;
 
             mSeparatorStrokeLength = resources.getDimension(R.dimen.line_separator_stroke_length);
+            mWeatherVerticalOffset = resources.getDimension(R.dimen.weather_text_vertical_offset);
         }
 
         @Override
@@ -294,6 +302,12 @@ public class WatchFace extends CanvasWatchFaceService {
                     bounds.width()/2 + mSeparatorStrokeLength/2,
                     bounds.height()/2,
                     mSeparatorPaint);
+
+            String lowText = "15";
+            canvas.drawText(lowText,
+                    bounds.width()/2,
+                    bounds.height()/2 + mLowTempPaint.getTextSize() + mWeatherVerticalOffset,
+                    mLowTempPaint);
         }
 
         /**
