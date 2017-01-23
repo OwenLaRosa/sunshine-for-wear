@@ -21,6 +21,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -125,6 +127,9 @@ public class WatchFace extends CanvasWatchFaceService {
         // horizontal space between high/low temp and weather graphic
         float mWeatherHorizontalOffset;
 
+        // sample image where weather graphic is drawn
+        Bitmap placeholderBitmap;
+
         /**
          * Whether the display supports fewer bits for each color in ambient mode. When true, we
          * disable anti-aliasing in ambient mode.
@@ -155,6 +160,8 @@ public class WatchFace extends CanvasWatchFaceService {
             mLowTempPaint.setTextAlign(Paint.Align.CENTER);
             mSeparatorPaint = createSeparatorPaint(resources.getColor(R.color.white),
                     resources.getDimension(R.dimen.line_separator_stroke_width));
+            placeholderBitmap = BitmapFactory.decodeResource(resources,
+                    R.mipmap.ic_launcher);
 
             mCalendar = Calendar.getInstance();
         }
@@ -317,6 +324,11 @@ public class WatchFace extends CanvasWatchFaceService {
                     bounds.width()/2 - mWeatherHorizontalOffset,
                     bounds.height()/2 + mHighTempPaint.getTextSize() + mWeatherVerticalOffset,
                     mHighTempPaint);
+
+            canvas.drawBitmap(placeholderBitmap,
+                    bounds.width()/2 + mWeatherHorizontalOffset,
+                    bounds.height()/2 + mWeatherVerticalOffset,
+                    null);
         }
 
         /**
