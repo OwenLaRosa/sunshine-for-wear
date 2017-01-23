@@ -306,10 +306,10 @@ public class WatchFace extends CanvasWatchFaceService {
                     bounds.height()/2 + mDateAndTempPaint.getTextSize() + mWeatherVerticalOffset,
                     mDateAndTempPaint);
 
-            /*canvas.drawBitmap(placeholderBitmap,
-                    bounds.width()/2 + mWeatherHorizontalOffset,
-                    bounds.height()/2 + mWeatherVerticalOffset,
-                    null);*/
+            canvas.drawBitmap(placeholderBitmap,
+                    bounds.width()/2 - placeholderBitmap.getWidth()/2,
+                    bounds.height()/2 + mDateAndTempPaint.getTextSize() + mWeatherVerticalOffset*2,
+                    null);
         }
 
         /**
