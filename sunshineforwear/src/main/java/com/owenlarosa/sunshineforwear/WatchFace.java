@@ -42,9 +42,6 @@ import java.util.Calendar;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
-import static android.R.attr.digits;
-import static android.R.attr.textSize;
-
 /**
  * Digital watch face with seconds. In ambient mode, the seconds aren't displayed. On devices with
  * low-bit ambient mode, the text is drawn without anti-aliasing in ambient mode.
@@ -95,9 +92,7 @@ public class WatchFace extends CanvasWatchFaceService {
         Paint mBackgroundPaint;
         // different font attributes for different text
         Paint mTimePaint;
-        Paint mDatePaint;
-        Paint mHighTempPaint;
-        Paint mLowTempPaint;
+        Paint mDateAndTempPaint;
         // there is a horizontal separator line between the date and weather
         Paint mSeparatorPaint;
 
@@ -124,8 +119,6 @@ public class WatchFace extends CanvasWatchFaceService {
 
         // vertical space between the line separator and high/low text
         float mWeatherVerticalOffset;
-        // horizontal space between high/low temp and weather graphic
-        float mWeatherHorizontalOffset;
 
         // sample image where weather graphic is drawn
         Bitmap placeholderBitmap;
@@ -153,11 +146,8 @@ public class WatchFace extends CanvasWatchFaceService {
 
             mTimePaint = createTextPaint(resources.getColor(R.color.digital_text));
             mTimePaint.setTextAlign(Paint.Align.CENTER);
-            mDatePaint = createTextPaint(resources.getColor(R.color.digital_text));
-            mDatePaint.setTextAlign(Paint.Align.CENTER);
-            mHighTempPaint = createTextPaint(resources.getColor(R.color.digital_text));
-            mLowTempPaint = createTextPaint(resources.getColor(R.color.digital_text));
-            mLowTempPaint.setTextAlign(Paint.Align.CENTER);
+            mDateAndTempPaint = createTextPaint(resources.getColor(R.color.digital_text));
+            mDateAndTempPaint.setTextAlign(Paint.Align.CENTER);
             mSeparatorPaint = createSeparatorPaint(resources.getColor(R.color.white),
                     resources.getDimension(R.dimen.line_separator_stroke_width));
             placeholderBitmap = BitmapFactory.decodeResource(resources,
@@ -239,17 +229,14 @@ public class WatchFace extends CanvasWatchFaceService {
             mTimePaint.setTextSize(timePaintSize);
             float datePaintSize = resources.getDimension(isRound ?
                     R.dimen.date_text_size_round : R.dimen.date_text_size);
-            mDatePaint.setTextSize(datePaintSize);
+            mDateAndTempPaint.setTextSize(datePaintSize);
             float tempPaintSize = resources.getDimensionPixelSize(isRound
                     ? R.dimen.temp_text_size_round : R.dimen.temp_text_size);
-            mHighTempPaint.setTextSize(tempPaintSize);
-            mLowTempPaint.setTextSize(tempPaintSize);
 
             mDateTextStartY = mYOffset + timePaintSize + mTextYInterSpace;
 
             mSeparatorStrokeLength = resources.getDimension(R.dimen.line_separator_stroke_length);
             mWeatherVerticalOffset = resources.getDimension(R.dimen.weather_text_vertical_offset);
-            mWeatherHorizontalOffset = resources.getDimension(R.dimen.weather_text_horizontal_offset);
         }
 
         @Override
@@ -305,7 +292,7 @@ public class WatchFace extends CanvasWatchFaceService {
                     Utils.getMonthString(mCalendar.get(Calendar.MONTH)),
                     mCalendar.get(Calendar.DAY_OF_MONTH),
                     mCalendar.get(Calendar.YEAR));
-            canvas.drawText(dateText, bounds.width()/2, mDateTextStartY, mDatePaint);
+            canvas.drawText(dateText, bounds.width()/2, mDateTextStartY, mDateAndTempPaint);
 
             canvas.drawLine(bounds.width()/2 - mSeparatorStrokeLength/2,
                     bounds.height()/2,
@@ -313,22 +300,16 @@ public class WatchFace extends CanvasWatchFaceService {
                     bounds.height()/2,
                     mSeparatorPaint);
 
-            String lowText = "15";
-            canvas.drawText(lowText,
+            String tempText = "20 / 15 °C";
+            canvas.drawText(tempText,
                     bounds.width()/2,
-                    bounds.height()/2 + mLowTempPaint.getTextSize() + mWeatherVerticalOffset,
-                    mLowTempPaint);
+                    bounds.height()/2 + mDateAndTempPaint.getTextSize() + mWeatherVerticalOffset,
+                    mDateAndTempPaint);
 
-            String highText = "20";
-            canvas.drawText(highText,
-                    bounds.width()/2 - mWeatherHorizontalOffset,
-                    bounds.height()/2 + mHighTempPaint.getTextSize() + mWeatherVerticalOffset,
-                    mHighTempPaint);
-
-            canvas.drawBitmap(placeholderBitmap,
+            /*canvas.drawBitmap(placeholderBitmap,
                     bounds.width()/2 + mWeatherHorizontalOffset,
                     bounds.height()/2 + mWeatherVerticalOffset,
-                    null);
+                    null);*/
         }
 
         /**
