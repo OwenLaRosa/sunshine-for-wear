@@ -96,6 +96,8 @@ public class WatchFace extends CanvasWatchFaceService {
         Paint mDatePaint;
         Paint mHighTempPaint;
         Paint mLowTempPaint;
+        // there is a horizontal separator line between the date and weather
+        Paint mSeparatorPaint;
 
         boolean mAmbient;
         Calendar mCalendar;
@@ -111,6 +113,9 @@ public class WatchFace extends CanvasWatchFaceService {
 
         // starting point to draw the text that shows the date
         float mDateTextStartY;
+
+        // horizontal length for line separator between date and weather
+        float mSeparatorStrokeLength;
 
         /**
          * Whether the display supports fewer bits for each color in ambient mode. When true, we
@@ -139,7 +144,8 @@ public class WatchFace extends CanvasWatchFaceService {
             mDatePaint.setTextAlign(Paint.Align.CENTER);
             mHighTempPaint = createTextPaint(resources.getColor(R.color.digital_text));
             mLowTempPaint = createTextPaint(resources.getColor(R.color.digital_text));
-
+            mSeparatorPaint = createSeparatorPaint(resources.getColor(R.color.white),
+                    resources.getDimension(R.dimen.line_separator_stroke_width));
 
             mCalendar = Calendar.getInstance();
         }
@@ -155,6 +161,13 @@ public class WatchFace extends CanvasWatchFaceService {
             paint.setColor(textColor);
             paint.setTypeface(NORMAL_TYPEFACE);
             paint.setAntiAlias(true);
+            return paint;
+        }
+
+        private Paint createSeparatorPaint(int color, float width) {
+            Paint paint = new Paint();
+            paint.setColor(color);
+            paint.setStrokeWidth(width);
             return paint;
         }
 
@@ -217,6 +230,8 @@ public class WatchFace extends CanvasWatchFaceService {
             mLowTempPaint.setTextSize(tempPaintSize);
 
             mDateTextStartY = mYOffset + timePaintSize + textYInterSpace;
+
+            mSeparatorStrokeLength = resources.getDimension(R.dimen.line_separator_stroke_length);
         }
 
         @Override
@@ -273,6 +288,12 @@ public class WatchFace extends CanvasWatchFaceService {
                     mCalendar.get(Calendar.DAY_OF_MONTH),
                     mCalendar.get(Calendar.YEAR));
             canvas.drawText(dateText, bounds.width()/2, mDateTextStartY, mDatePaint);
+
+            canvas.drawLine(bounds.width()/2 - mSeparatorStrokeLength/2,
+                    bounds.height()/2,
+                    bounds.width()/2 + mSeparatorStrokeLength/2,
+                    bounds.height()/2,
+                    mSeparatorPaint);
         }
 
         /**
