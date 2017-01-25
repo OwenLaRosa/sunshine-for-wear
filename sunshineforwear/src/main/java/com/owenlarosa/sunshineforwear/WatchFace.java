@@ -93,8 +93,6 @@ public class WatchFace extends CanvasWatchFaceService {
         // different font attributes for different text
         Paint mTimePaint;
         Paint mDateAndTempPaint;
-        // there is a horizontal separator line between the date and weather
-        Paint mSeparatorPaint;
 
         boolean mAmbient;
         Calendar mCalendar;
@@ -114,10 +112,7 @@ public class WatchFace extends CanvasWatchFaceService {
         // starting point to draw the text that shows the date
         float mDateTextStartY;
 
-        // horizontal length for line separator between date and weather
-        float mSeparatorStrokeLength;
-
-        // vertical space between the line separator and high/low text
+        // space from screen center and high/low text
         float mWeatherVerticalOffset;
 
         // sample image where weather graphic is drawn
@@ -146,10 +141,9 @@ public class WatchFace extends CanvasWatchFaceService {
 
             mTimePaint = createTextPaint(resources.getColor(R.color.digital_text));
             mTimePaint.setTextAlign(Paint.Align.CENTER);
+            mTimePaint.setColor(resources.getColor(R.color.black));
             mDateAndTempPaint = createTextPaint(resources.getColor(R.color.digital_text));
             mDateAndTempPaint.setTextAlign(Paint.Align.CENTER);
-            mSeparatorPaint = createSeparatorPaint(resources.getColor(R.color.white),
-                    resources.getDimension(R.dimen.line_separator_stroke_width));
             placeholderBitmap = BitmapFactory.decodeResource(resources,
                     R.mipmap.ic_launcher);
 
@@ -167,13 +161,6 @@ public class WatchFace extends CanvasWatchFaceService {
             paint.setColor(textColor);
             paint.setTypeface(NORMAL_TYPEFACE);
             paint.setAntiAlias(true);
-            return paint;
-        }
-
-        private Paint createSeparatorPaint(int color, float width) {
-            Paint paint = new Paint();
-            paint.setColor(color);
-            paint.setStrokeWidth(width);
             return paint;
         }
 
@@ -235,7 +222,6 @@ public class WatchFace extends CanvasWatchFaceService {
 
             mDateTextStartY = mYOffset + timePaintSize + mTextYInterSpace;
 
-            mSeparatorStrokeLength = resources.getDimension(R.dimen.line_separator_stroke_length);
             mWeatherVerticalOffset = resources.getDimension(R.dimen.weather_text_vertical_offset);
         }
 
@@ -270,16 +256,31 @@ public class WatchFace extends CanvasWatchFaceService {
         @Override
         public void onDraw(Canvas canvas, Rect bounds) {
             // Draw the background.
+            Resources resources = getResources();
             if (isInAmbientMode()) {
                 canvas.drawColor(Color.BLACK);
             } else {
-                canvas.drawRect(0, 0, bounds.width(), bounds.height(), mBackgroundPaint);
+                mBackgroundPaint.setColor(resources.getColor(R.color.sunshine_color_alternate));
+                canvas.drawRect(0, 0, bounds.width(), bounds.height()/2, mBackgroundPaint);
+                mBackgroundPaint.setColor(resources.getColor(R.color.sunshine_color_primary));
+                canvas.drawRect(0, bounds.height()/2, bounds.width(), bounds.height(), mBackgroundPaint);
             }
 
             // Draw H:MM in ambient mode or H:MM:SS in interactive mode.
             long now = System.currentTimeMillis();
             mCalendar.setTimeInMillis(now);
 
+            if (!isInAmbientMode()) {
+                // text is normally white, but the date should be black when not in ambient
+                mDateAndTempPaint.setColor(resources.getColor(R.color.black));
+            }
+            if (isInAmbientMode()) {
+                // white text will be shown against dark background in ambient
+                mTimePaint.setColor(resources.getColor(R.color.white));
+            } else {
+                // black text will be shown on light background when active
+                mTimePaint.setColor(resources.getColor(R.color.black));
+            }
             String timeText = mAmbient
                     ? String.format("%d:%02d", mCalendar.get(Calendar.HOUR),
                     mCalendar.get(Calendar.MINUTE))
@@ -300,12 +301,7 @@ public class WatchFace extends CanvasWatchFaceService {
                     bounds.height()/2 - mWeatherVerticalOffset*1.5f,
                     mDateAndTempPaint);
 
-            canvas.drawLine(bounds.width()/2 - mSeparatorStrokeLength/2,
-                    bounds.height()/2,
-                    bounds.width()/2 + mSeparatorStrokeLength/2,
-                    bounds.height()/2,
-                    mSeparatorPaint);
-
+            mDateAndTempPaint.setColor(resources.getColor(R.color.white));
             String tempText = "20 / 15 °C";
             canvas.drawText(tempText,
                     bounds.width()/2,
