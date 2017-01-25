@@ -272,7 +272,7 @@ public class WatchFace extends CanvasWatchFaceService {
 
             if (!isInAmbientMode()) {
                 // text is normally white, but the date should be black when not in ambient
-                mDateAndTempPaint.setColor(resources.getColor(R.color.black));
+                mDateAndTempPaint.setColor(resources.getColor(R.color.date_text_color));
             }
             if (isInAmbientMode()) {
                 // white text will be shown against dark background in ambient

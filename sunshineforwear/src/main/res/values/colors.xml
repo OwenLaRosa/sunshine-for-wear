@@ -4,4 +4,6 @@
     <color name="sunshine_color_alternate">#FFFDE7</color>
     <color name="background">#000000</color>
     <color name="digital_text">#ffffff</color>
+    <color name="date_text_color">#90A4AE</color>
+
 </resources>
