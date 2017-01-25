@@ -285,14 +285,20 @@ public class WatchFace extends CanvasWatchFaceService {
                     mCalendar.get(Calendar.MINUTE))
                     : String.format("%d:%02d:%02d", mCalendar.get(Calendar.HOUR),
                     mCalendar.get(Calendar.MINUTE), mCalendar.get(Calendar.SECOND));
-            canvas.drawText(timeText, bounds.width()/2, mYOffset, mTimePaint);
+            canvas.drawText(timeText,
+                    bounds.width()/2,
+                    bounds.height()/2 - mWeatherVerticalOffset*2.5f - mDateAndTempPaint.getTextSize(),
+                    mTimePaint);
 
             String dateText = String.format("%s, %s %d %d",
                     Utils.getDayString(mCalendar.get(Calendar.DAY_OF_WEEK)),
                     Utils.getMonthString(mCalendar.get(Calendar.MONTH)),
                     mCalendar.get(Calendar.DAY_OF_MONTH),
                     mCalendar.get(Calendar.YEAR));
-            canvas.drawText(dateText, bounds.width()/2, mDateTextStartY, mDateAndTempPaint);
+            canvas.drawText(dateText,
+                    bounds.width()/2,
+                    bounds.height()/2 - mWeatherVerticalOffset*1.5f,
+                    mDateAndTempPaint);
 
             canvas.drawLine(bounds.width()/2 - mSeparatorStrokeLength/2,
                     bounds.height()/2,
