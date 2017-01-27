@@ -36,6 +36,7 @@ import android.support.wearable.watchface.WatchFaceStyle;
 import android.view.SurfaceHolder;
 import android.view.WindowInsets;
 
+import com.example.android.sunshine.R;
 
 import java.lang.ref.WeakReference;
 import java.util.Calendar;
@@ -60,6 +61,12 @@ public class WatchFace extends CanvasWatchFaceService {
      * Handler message id for updating the time periodically in interactive mode.
      */
     private static final int MSG_UPDATE_TIME = 0;
+
+    // weather data to be displayed on the screen
+    public static String units = "C";
+    public static int high = 0;
+    public static int low = 0;
+    public static String type = "";
 
     @Override
     public Engine onCreateEngine() {
@@ -302,7 +309,10 @@ public class WatchFace extends CanvasWatchFaceService {
                     mDateAndTempPaint);
 
             mDateAndTempPaint.setColor(resources.getColor(R.color.white));
-            String tempText = "20 / 15 °C";
+            String tempText = String.format("%d / %d °%s",
+                    high,
+                    low,
+                    units);
             canvas.drawText(tempText,
                     bounds.width()/2,
                     bounds.height()/2 + mDateAndTempPaint.getTextSize() + mWeatherVerticalOffset,

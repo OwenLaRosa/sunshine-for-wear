@@ -19,6 +19,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -35,6 +36,14 @@ import android.widget.ProgressBar;
 import com.example.android.sunshine.data.SunshinePreferences;
 import com.example.android.sunshine.data.WeatherContract;
 import com.example.android.sunshine.sync.SunshineSyncUtils;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.wearable.DataApi;
+import com.google.android.gms.wearable.DataMap;
+import com.google.android.gms.wearable.PutDataMapRequest;
+import com.google.android.gms.wearable.PutDataRequest;
+import com.google.android.gms.wearable.Wearable;
 
 public class MainActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor>,
@@ -79,12 +88,38 @@ public class MainActivity extends AppCompatActivity implements
 
     private ProgressBar mLoadingIndicator;
 
+    public GoogleApiClient mGoogleApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forecast);
         getSupportActionBar().setElevation(0f);
+
+        // must register a Google API client to communicate with wearable data layer
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
+                    @Override
+                    public void onConnected(Bundle connectionHint) {
+                        Log.d(TAG, "onConnected: " + connectionHint);
+                        // after connecting the watch should be updated with the new data
+                        sendWeatherData();
+                    }
+                    @Override
+                    public void onConnectionSuspended(int cause) {
+                        Log.d(TAG, "onConnectionSuspended: " + cause);
+                    }
+                })
+                .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
+                    @Override
+                    public void onConnectionFailed(ConnectionResult result) {
+                        Log.d(TAG, "onConnectionFailed: " + result);
+                    }
+                })
+                // Request access only to the Wearable API
+                .addApi(Wearable.API)
+                .build();
+        mGoogleApiClient.connect();
 
         /*
          * Using findViewById, we get a reference to our RecyclerView from xml. This allows us to
@@ -343,4 +378,34 @@ public class MainActivity extends AppCompatActivity implements
 
         return super.onOptionsItemSelected(item);
     }
+
+    private void sendWeatherData() {
+        PutDataMapRequest putDataMapRequest = PutDataMapRequest.create("/weather");
+        DataMap dataMap = putDataMapRequest.getDataMap();
+
+        // Celsius or Fahrenheit
+        dataMap.putString("units", "F");
+        // temperature
+        dataMap.putInt("high", 77);
+        dataMap.putInt("low", 68);
+        // weather type
+        dataMap.putString("type", "clear");
+
+        PutDataRequest request = putDataMapRequest.asPutDataRequest();
+        // data should be pushed to the wearable instantly
+        request.setUrgent();
+
+        Wearable.DataApi.putDataItem(mGoogleApiClient, request)
+                .setResultCallback(new ResultCallback<DataApi.DataItemResult>() {
+                    @Override
+                    public void onResult(@NonNull DataApi.DataItemResult dataItemResult) {
+                        if (dataItemResult.getStatus().isSuccess()) {
+                            Log.d(TAG, "Sending data to wearable succeeded! :)");
+                        } else {
+                            Log.e(TAG, "Sending data to wearable failed: " + dataItemResult.getStatus().getStatusMessage());
+                        }
+                    }
+                });
+    }
+
 }
