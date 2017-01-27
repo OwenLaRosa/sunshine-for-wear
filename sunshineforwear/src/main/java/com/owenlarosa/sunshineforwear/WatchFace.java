@@ -155,6 +155,9 @@ public class WatchFace extends CanvasWatchFaceService {
                     R.mipmap.ic_launcher);
 
             mCalendar = Calendar.getInstance();
+
+            Intent serviceIntent = new Intent(WatchFace.this, DataLayerListenerService.class);
+            startService(serviceIntent);
         }
 
         @Override
