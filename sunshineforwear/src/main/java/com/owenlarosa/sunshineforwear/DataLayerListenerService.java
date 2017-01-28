@@ -32,19 +32,12 @@ public class DataLayerListenerService extends WearableListenerService {
     @Override
     public void onCreate() {
         super.onCreate();
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(Wearable.API)
-                .build();
-        mGoogleApiClient.connect();
     }
 
     @Override
     public void onDataChanged(DataEventBuffer dataEventBuffer) {
         super.onDataChanged(dataEventBuffer);
 
-        if (!mGoogleApiClient.isConnected()) {
-            return;
-        }
         for (DataEvent event : dataEventBuffer) {
             Uri uri = event.getDataItem().getUri();
             String path = uri.getPath();
