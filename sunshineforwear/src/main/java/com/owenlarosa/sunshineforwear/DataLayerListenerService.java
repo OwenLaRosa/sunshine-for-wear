@@ -43,6 +43,8 @@ public class DataLayerListenerService extends WearableListenerService {
                 WatchFace.high = dataMap.getInt(KEY_HIGH);
                 WatchFace.low = dataMap.getInt(KEY_LOW);
                 WatchFace.type = dataMap.getString(KEY_TYPE);
+                // temp color should be calculated after all the other values have been set
+                WatchFace.setTempColor();
             }
         }
     }

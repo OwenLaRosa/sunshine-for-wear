@@ -62,11 +62,21 @@ public class WatchFace extends CanvasWatchFaceService {
      */
     private static final int MSG_UPDATE_TIME = 0;
 
+    static Resources resources;
+
     // weather data to be displayed on the screen
     public static String units = "C";
     public static int high = 0;
     public static int low = 0;
     public static String type = "";
+    // color to be shown on bottom half of screen
+    public static Integer tempColor = null;
+
+    public static void setTempColor() {
+        // average the high and low, then determine the result's color based on which temps it falls between
+        int colorId = Utils.getColorForTemp((int) Math.floor(((high + low)/2)), units.equals("C"));
+        tempColor = resources.getColor(colorId);
+    }
 
     @Override
     public Engine onCreateEngine() {
@@ -140,7 +150,7 @@ public class WatchFace extends CanvasWatchFaceService {
                     .setBackgroundVisibility(WatchFaceStyle.BACKGROUND_VISIBILITY_INTERRUPTIVE)
                     .setShowSystemUiTime(false)
                     .build());
-            Resources resources = WatchFace.this.getResources();
+            resources = WatchFace.this.getResources();
             mYOffset = resources.getDimension(R.dimen.digital_y_offset);
 
             mBackgroundPaint = new Paint();
@@ -272,7 +282,7 @@ public class WatchFace extends CanvasWatchFaceService {
             } else {
                 mBackgroundPaint.setColor(resources.getColor(R.color.sunshine_color_alternate));
                 canvas.drawRect(0, 0, bounds.width(), bounds.height()/2, mBackgroundPaint);
-                mBackgroundPaint.setColor(resources.getColor(R.color.sunshine_color_primary));
+                mBackgroundPaint.setColor(tempColor != null ? tempColor : resources.getColor(R.color.sunshine_color_primary));
                 canvas.drawRect(0, bounds.height()/2, bounds.width(), bounds.height(), mBackgroundPaint);
             }
 

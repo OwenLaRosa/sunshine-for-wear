@@ -1,5 +1,7 @@
 package com.owenlarosa.sunshineforwear;
 
+import com.example.android.sunshine.R;
+
 /**
  * Created by Owen LaRosa on 1/18/17.
  */
@@ -65,6 +67,44 @@ public class Utils {
                 return "DEC";
             default:
                 return "";
+        }
+    }
+
+    /**
+     * Get color corresponding to degree range
+     * Degree ranges are by 10s in Fahrenheit. If temperature is in celsius, degrees are first converted
+     * @param degrees temperature
+     * @param metric true if degree measurement in celsius
+     * @return Color corresponding to a color range
+     */
+    public static int getColorForTemp(int degrees, boolean metric) {
+        if (metric) {
+            // convert to Fahrenheit if degrees provided in metric units
+            degrees = (int) ((float) degrees * 1.8f + 32);
+        }
+        // ranges of below 10, 100 and above, and intervals of 10 degrees
+        if (degrees >= 100) {
+            return R.color.temp_100_plus;
+        } else if (degrees >= 90) {
+            return R.color.temp_90s;
+        } else if (degrees >= 80) {
+            return R.color.temp_80s;
+        } else if (degrees >= 70) {
+            return R.color.temp_70s;
+        } else if (degrees >= 60 ) {
+            return R.color.temp_60s;
+        } else if (degrees >= 50) {
+            return R.color.temp_50s;
+        } else if (degrees >= 40) {
+            return R.color.temp_40s;
+        } else if (degrees >= 30) {
+            return R.color.temp_30s;
+        } else if (degrees >= 20) {
+            return R.color.temp_20s;
+        } else if (degrees >= 10) {
+            return R.color.temp_10s;
+        } else {
+            return R.color.temp_below_10;
         }
     }
 

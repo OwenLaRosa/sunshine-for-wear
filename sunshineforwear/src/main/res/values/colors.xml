@@ -6,4 +6,17 @@
     <color name="digital_text">#ffffff</color>
     <color name="date_text_color">#90A4AE</color>
 
+    <!-- color coding temperature for glanceability -->
+    <color name="temp_100_plus">#880E4F</color>
+    <color name="temp_90s">#B71C1C</color>
+    <color name="temp_80s">#E57373</color>
+    <color name="temp_70s">#FFB74D</color>
+    <color name="temp_60s">#FFEB3B</color>
+    <color name="temp_50s">#66BB6A</color>
+    <color name="temp_40s">#00796B</color>
+    <color name="temp_30s">#00ACC1</color>
+    <color name="temp_20s">#2196F3</color>
+    <color name="temp_10s">#0277BD</color>
+    <color name="temp_below_10">#1A237E</color>
+
 </resources>
