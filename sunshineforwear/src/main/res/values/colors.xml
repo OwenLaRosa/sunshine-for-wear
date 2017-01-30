@@ -19,4 +19,25 @@
     <color name="temp_10s">#0277BD</color>
     <color name="temp_below_10">#1A237E</color>
 
+    <!-- colors for time and date text based on weather condition -->
+    <color name="text_color_storm">#FFD600</color>
+    <color name="text_color_fog">#ffffff</color>
+    <color name="text_color_snow">#000000</color>
+    <color name="text_color_light_rain">#1E88E5</color>
+    <color name="text_color_heavy_rain">#01579B</color>
+    <color name="text_color_light_clouds">#BDBDBD</color>
+    <color name="text_color_cloudy">#E0E0E0</color>
+    <color name="text_color_clear">#F9A825</color>
+
+    <!-- colors for top half background based on weather condition -->
+    <color name="back_color_storm">#455A64</color>
+    <color name="back_color_fog">#90A4AE</color>
+    <color name="back_color_snow">#ECEFF1</color>
+    <color name="back_color_light_rain">#B0BEC5</color>
+    <color name="back_color_heavy_rain">#B0BEC5</color>
+    <color name="back_color_light_clouds">#42A5F5</color>
+    <color name="back_color_cloudy">#1976D2</color>
+    <color name="back_color_clear">#448AFF</color>
+
+
 </resources>

@@ -1,5 +1,7 @@
 package com.owenlarosa.sunshineforwear;
 
+import android.util.Log;
+
 import com.example.android.sunshine.R;
 
 /**
@@ -108,4 +110,87 @@ public class Utils {
         }
     }
 
+    /**
+     * Get text color (for time and date) based on weather condition
+     * @param weatherId OpenWeatherMap condition ID
+     * @return Resource ID of the color
+     */
+    public static int getTextColorForWeatherCondition(int weatherId) {
+
+        /*
+         * Based on weather code data for Open Weather Map.
+         */
+        if (weatherId >= 200 && weatherId <= 232) {
+            return R.color.text_color_storm;
+        } else if (weatherId >= 300 && weatherId <= 321) {
+            return R.color.text_color_light_rain;
+        } else if (weatherId >= 500 && weatherId <= 504) {
+            return R.color.text_color_heavy_rain;
+        } else if (weatherId == 511) {
+            return R.color.text_color_snow;
+        } else if (weatherId >= 520 && weatherId <= 531) {
+            return R.color.text_color_heavy_rain;
+        } else if (weatherId >= 600 && weatherId <= 622) {
+            return R.color.text_color_snow;
+        } else if (weatherId >= 701 && weatherId <= 761) {
+            return R.color.text_color_fog;
+        } else if (weatherId == 761 || weatherId == 771 || weatherId == 781) {
+            return R.color.text_color_storm;
+        } else if (weatherId == 800) {
+            return R.color.text_color_clear;
+        } else if (weatherId == 801) {
+            return R.color.text_color_light_clouds;
+        } else if (weatherId >= 802 && weatherId <= 804) {
+            return R.color.text_color_cloudy;
+        } else if (weatherId >= 900 && weatherId <= 906) {
+            return R.color.text_color_storm;
+        } else if (weatherId >= 958 && weatherId <= 962) {
+            return R.color.text_color_storm;
+        } else if (weatherId >= 951 && weatherId <= 957) {
+            return R.color.text_color_clear;
+        }
+        return R.color.text_color_storm;
+    }
+
+    /**
+     * Get background color for tap half of screen based on weather
+     * @param weatherId OpenWeatherMap condition ID
+     * @return Resource ID of the color
+     */
+    public static int getBackgroundColorForWeatherCondition(int weatherId) {
+
+        /*
+         * Based on weather code data for Open Weather Map.
+         */
+        if (weatherId >= 200 && weatherId <= 232) {
+            return R.color.back_color_storm;
+        } else if (weatherId >= 300 && weatherId <= 321) {
+            return R.color.back_color_light_rain;
+        } else if (weatherId >= 500 && weatherId <= 504) {
+            return R.color.back_color_heavy_rain;
+        } else if (weatherId == 511) {
+            return R.color.back_color_snow;
+        } else if (weatherId >= 520 && weatherId <= 531) {
+            return R.color.back_color_heavy_rain;
+        } else if (weatherId >= 600 && weatherId <= 622) {
+            return R.color.back_color_snow;
+        } else if (weatherId >= 701 && weatherId <= 761) {
+            return R.color.back_color_fog;
+        } else if (weatherId == 761 || weatherId == 771 || weatherId == 781) {
+            return R.color.back_color_storm;
+        } else if (weatherId == 800) {
+            return R.color.back_color_clear;
+        } else if (weatherId == 801) {
+            return R.color.back_color_light_clouds;
+        } else if (weatherId >= 802 && weatherId <= 804) {
+            return R.color.back_color_cloudy;
+        } else if (weatherId >= 900 && weatherId <= 906) {
+            return R.color.back_color_storm;
+        } else if (weatherId >= 958 && weatherId <= 962) {
+            return R.color.back_color_storm;
+        } else if (weatherId >= 951 && weatherId <= 957) {
+            return R.color.back_color_clear;
+        }
+        return R.color.back_color_storm;
+    }
 }
