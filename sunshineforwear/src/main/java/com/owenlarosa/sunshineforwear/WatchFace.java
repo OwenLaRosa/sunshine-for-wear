@@ -68,14 +68,30 @@ public class WatchFace extends CanvasWatchFaceService {
     public static String units = "C";
     public static int high = 0;
     public static int low = 0;
-    public static String type = "";
+    public static Integer type = null;
     // color to be shown on bottom half of screen
     public static Integer tempColor = null;
+    // color to be shown on text at the top half of the screen, time and date
+    public static Integer weatherTextColor = null;
+    // color to be shown on top half of the screen
+    public static Integer weatherBackgroundColor = null;
 
     public static void setTempColor() {
         // average the high and low, then determine the result's color based on which temps it falls between
         int colorId = Utils.getColorForTemp((int) Math.floor(((high + low)/2)), units.equals("C"));
         tempColor = resources.getColor(colorId);
+    }
+
+    public static void setWeatherTextColor() {
+        if (type == null) return;
+        int colorId = Utils.getTextColorForWeatherCondition(type);
+        weatherTextColor = resources.getColor(colorId);
+    }
+
+    public static void setWeatherBackgroundColor() {
+        if (type == null) return;
+        int colorId = Utils.getBackgroundColorForWeatherCondition(type);
+        weatherBackgroundColor = resources.getColor(colorId);
     }
 
     @Override
@@ -280,7 +296,7 @@ public class WatchFace extends CanvasWatchFaceService {
             if (isInAmbientMode()) {
                 canvas.drawColor(Color.BLACK);
             } else {
-                mBackgroundPaint.setColor(resources.getColor(R.color.sunshine_color_alternate));
+                mBackgroundPaint.setColor(weatherBackgroundColor != null ? weatherBackgroundColor : resources.getColor(R.color.sunshine_color_alternate));
                 canvas.drawRect(0, 0, bounds.width(), bounds.height()/2, mBackgroundPaint);
                 mBackgroundPaint.setColor(tempColor != null ? tempColor : resources.getColor(R.color.sunshine_color_primary));
                 canvas.drawRect(0, bounds.height()/2, bounds.width(), bounds.height(), mBackgroundPaint);
@@ -292,14 +308,14 @@ public class WatchFace extends CanvasWatchFaceService {
 
             if (!isInAmbientMode()) {
                 // text is normally white, but the date should be black when not in ambient
-                mDateAndTempPaint.setColor(resources.getColor(R.color.date_text_color));
+                mDateAndTempPaint.setColor(weatherTextColor != null ? weatherTextColor : resources.getColor(R.color.date_text_color));
             }
             if (isInAmbientMode()) {
                 // white text will be shown against dark background in ambient
                 mTimePaint.setColor(resources.getColor(R.color.white));
             } else {
-                // black text will be shown on light background when active
-                mTimePaint.setColor(resources.getColor(R.color.black));
+                // color corresponding to weather type will be used
+                mTimePaint.setColor(weatherTextColor != null ? weatherTextColor : resources.getColor(R.color.black));
             }
             String timeText = mAmbient
                     ? String.format("%d:%02d", mCalendar.get(Calendar.HOUR),
