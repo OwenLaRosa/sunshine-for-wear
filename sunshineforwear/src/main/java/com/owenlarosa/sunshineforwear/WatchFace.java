@@ -76,6 +76,8 @@ public class WatchFace extends CanvasWatchFaceService {
     // color to be shown on top half of the screen
     public static Integer weatherBackgroundColor = null;
 
+    public static Bitmap weatherImageBitmap = null;
+
     public static void setTempColor() {
         // average the high and low, then determine the result's color based on which temps it falls between
         int colorId = Utils.getColorForTemp((int) Math.floor(((high + low)/2)), units.equals("C"));
@@ -177,8 +179,7 @@ public class WatchFace extends CanvasWatchFaceService {
             mTimePaint.setColor(resources.getColor(R.color.black));
             mDateAndTempPaint = createTextPaint(resources.getColor(R.color.digital_text));
             mDateAndTempPaint.setTextAlign(Paint.Align.CENTER);
-            placeholderBitmap = BitmapFactory.decodeResource(resources,
-                    R.mipmap.ic_launcher);
+            placeholderBitmap = Utils.getBitmap(WatchFace.this, R.drawable.art_clear);
 
             mCalendar = Calendar.getInstance();
 
@@ -347,7 +348,7 @@ public class WatchFace extends CanvasWatchFaceService {
                     bounds.height()/2 + mDateAndTempPaint.getTextSize() + mWeatherVerticalOffset,
                     mDateAndTempPaint);
 
-            canvas.drawBitmap(placeholderBitmap,
+            canvas.drawBitmap(weatherImageBitmap != null ? weatherImageBitmap : placeholderBitmap,
                     bounds.width()/2 - placeholderBitmap.getWidth()/2,
                     bounds.height()/2 + mDateAndTempPaint.getTextSize() + mWeatherVerticalOffset*2,
                     null);

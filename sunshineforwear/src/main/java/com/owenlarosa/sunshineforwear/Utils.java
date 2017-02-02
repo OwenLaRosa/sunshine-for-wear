@@ -1,8 +1,16 @@
 package com.owenlarosa.sunshineforwear;
 
-import android.util.Log;
+import android.annotation.TargetApi;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.VectorDrawable;
+import android.os.Build;
+import android.support.v4.content.ContextCompat;
 
 import com.example.android.sunshine.R;
+
+import static android.R.attr.bitmap;
 
 /**
  * Created by Owen LaRosa on 1/18/17.
@@ -193,4 +201,57 @@ public class Utils {
         }
         return R.color.back_color_storm;
     }
+
+    /**
+     * Get resource ID of a vector drawable for weather condition
+     * @param weatherId Weather ID from OpenWeatherMap
+     * @return Resource ID of the drawable
+     */
+    public static int getDrawableForWeatherCondition(int weatherId) {
+        if (weatherId >= 200 && weatherId <= 232) {
+            return R.drawable.art_storm;
+        } else if (weatherId >= 300 && weatherId <= 321) {
+            return R.drawable.art_light_rain;
+        } else if (weatherId >= 500 && weatherId <= 504) {
+            return R.drawable.art_rain;
+        } else if (weatherId == 511) {
+            return R.drawable.art_snow;
+        } else if (weatherId >= 520 && weatherId <= 531) {
+            return R.drawable.art_rain;
+        } else if (weatherId >= 600 && weatherId <= 622) {
+            return R.drawable.art_snow;
+        } else if (weatherId >= 701 && weatherId <= 761) {
+            return R.drawable.art_fog;
+        } else if (weatherId == 761 || weatherId == 771 || weatherId == 781) {
+            return R.drawable.art_storm;
+        } else if (weatherId == 800) {
+            return R.drawable.art_clear;
+        } else if (weatherId == 801) {
+            return R.drawable.art_light_clouds;
+        } else if (weatherId >= 802 && weatherId <= 804) {
+            return R.drawable.art_clouds;
+        } else if (weatherId >= 900 && weatherId <= 906) {
+            return R.drawable.art_storm;
+        } else if (weatherId >= 958 && weatherId <= 962) {
+            return R.drawable.art_storm;
+        } else if (weatherId >= 951 && weatherId <= 957) {
+            return R.drawable.art_clear;
+        }
+        return R.drawable.art_storm;
+    }
+
+    // referenced: http://stackoverflow.com/questions/33696488/getting-bitmap-from-vector-drawable
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public static Bitmap getBitmap(Context context, int resourceId) {
+        VectorDrawable vectorDrawable = (VectorDrawable) ContextCompat.getDrawable(context, resourceId);
+        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth()*2,
+                vectorDrawable.getIntrinsicHeight()*2, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        vectorDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        vectorDrawable.draw(canvas);
+        return bitmap;
+    }
+
+
+
 }
