@@ -49,6 +49,7 @@ public class DataLayerListenerService extends WearableListenerService {
                 WatchFace.setWeatherBackgroundColor();
                 int imageId = Utils.getDrawableForWeatherCondition(WatchFace.type);
                 WatchFace.weatherImageBitmap = Utils.getBitmap(this, imageId);
+                WatchFace.setWeatherTypeText();
             }
         }
     }

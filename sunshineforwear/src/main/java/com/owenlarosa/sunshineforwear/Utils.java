@@ -240,18 +240,54 @@ public class Utils {
         return R.drawable.art_storm;
     }
 
+    /**
+     * Get weather description string
+     * @param weatherId Weather condition ID from OpenWeatherMap
+     * @return Resource ID of the string
+     */
+    public static int getStringIdForWeatherCondition(int weatherId) {
+        if (weatherId >= 200 && weatherId <= 232) {
+            return R.string.weather_storm;
+        } else if (weatherId >= 300 && weatherId <= 321) {
+            return R.string.weather_rain;
+        } else if (weatherId >= 500 && weatherId <= 504) {
+            return R.string.weather_rain;
+        } else if (weatherId == 511) {
+            return R.string.weather_snow;
+        } else if (weatherId >= 520 && weatherId <= 531) {
+            return R.string.weather_rain;
+        } else if (weatherId >= 600 && weatherId <= 622) {
+            return R.string.weather_snow;
+        } else if (weatherId >= 701 && weatherId <= 761) {
+            return R.string.weather_fog;
+        } else if (weatherId == 761 || weatherId == 771 || weatherId == 781) {
+            return R.string.weather_storm;
+        } else if (weatherId == 800) {
+            return R.string.weather_sunny;
+        } else if (weatherId == 801) {
+            return R.string.weather_cloudy;
+        } else if (weatherId >= 802 && weatherId <= 804) {
+            return R.string.weather_cloudy;
+        } else if (weatherId >= 900 && weatherId <= 906) {
+            return R.string.weather_storm;
+        } else if (weatherId >= 958 && weatherId <= 962) {
+            return R.string.weather_storm;
+        } else if (weatherId >= 951 && weatherId <= 957) {
+            return R.string.weather_sunny;
+        }
+        return R.string.weather_storm;
+    }
+
     // referenced: http://stackoverflow.com/questions/33696488/getting-bitmap-from-vector-drawable
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public static Bitmap getBitmap(Context context, int resourceId) {
         VectorDrawable vectorDrawable = (VectorDrawable) ContextCompat.getDrawable(context, resourceId);
-        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth()*2,
-                vectorDrawable.getIntrinsicHeight()*2, Bitmap.Config.ARGB_8888);
+        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth() * 2,
+                vectorDrawable.getIntrinsicHeight() * 2, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         vectorDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
         vectorDrawable.draw(canvas);
         return bitmap;
     }
-
-
 
 }

@@ -75,8 +75,10 @@ public class WatchFace extends CanvasWatchFaceService {
     public static Integer weatherTextColor = null;
     // color to be shown on top half of the screen
     public static Integer weatherBackgroundColor = null;
-
+    // graphic to be shown for weather when watch face is active
     public static Bitmap weatherImageBitmap = null;
+    // Description of the weather condition type (e.g. Sunny)
+    public static String weatherString = "";
 
     public static void setTempColor() {
         // average the high and low, then determine the result's color based on which temps it falls between
@@ -94,6 +96,11 @@ public class WatchFace extends CanvasWatchFaceService {
         if (type == null) return;
         int colorId = Utils.getBackgroundColorForWeatherCondition(type);
         weatherBackgroundColor = resources.getColor(colorId);
+    }
+
+    public static void setWeatherTypeText() {
+        int weatherStringId = Utils.getStringIdForWeatherCondition(type);
+        weatherString = resources.getString(weatherStringId);
     }
 
     @Override
@@ -180,6 +187,7 @@ public class WatchFace extends CanvasWatchFaceService {
             mDateAndTempPaint = createTextPaint(resources.getColor(R.color.digital_text));
             mDateAndTempPaint.setTextAlign(Paint.Align.CENTER);
             placeholderBitmap = Utils.getBitmap(WatchFace.this, R.drawable.art_clear);
+            weatherString = resources.getString(R.string.weather_sunny);
 
             mCalendar = Calendar.getInstance();
 
@@ -348,10 +356,17 @@ public class WatchFace extends CanvasWatchFaceService {
                     bounds.height()/2 + mDateAndTempPaint.getTextSize() + mWeatherVerticalOffset,
                     mDateAndTempPaint);
 
-            canvas.drawBitmap(weatherImageBitmap != null ? weatherImageBitmap : placeholderBitmap,
-                    bounds.width()/2 - placeholderBitmap.getWidth()/2,
-                    bounds.height()/2 + mDateAndTempPaint.getTextSize() + mWeatherVerticalOffset*2,
-                    null);
+            if (isInAmbientMode()) {
+                canvas.drawText(weatherString,
+                        bounds.width()/2,
+                        bounds.height() / 2 + mDateAndTempPaint.getTextSize() * 2 + mWeatherVerticalOffset * 2,
+                        mDateAndTempPaint);
+            } else {
+                canvas.drawBitmap(weatherImageBitmap != null ? weatherImageBitmap : placeholderBitmap,
+                        bounds.width() / 2 - placeholderBitmap.getWidth() / 2,
+                        bounds.height() / 2 + mDateAndTempPaint.getTextSize() + mWeatherVerticalOffset * 2,
+                        null);
+            }
         }
 
         /**
