@@ -40,8 +40,15 @@ public class DataLayerListenerService extends WearableListenerService {
             if (path.equals("/weather")) {
                 final DataMap dataMap = DataMapItem.fromDataItem(event.getDataItem()).getDataMap();
                 WatchFace.units = dataMap.getString(KEY_UNITS);
-                WatchFace.high = dataMap.getInt(KEY_HIGH);
-                WatchFace.low = dataMap.getInt(KEY_LOW);
+                int high = dataMap.getInt(KEY_HIGH);
+                int low = dataMap.get(KEY_LOW);
+                if (WatchFace.units.equals("C")) {
+                    WatchFace.high = high;
+                    WatchFace.low = low;
+                } else {
+                    WatchFace.high = (int) ((float) high * 1.8f + 32);
+                    WatchFace.low = (int) ((float) low * 1.8f + 32);
+                }
                 WatchFace.type = dataMap.getInt(KEY_TYPE);
                 // temp color should be calculated after all the other values have been set
                 WatchFace.setTempColor();
