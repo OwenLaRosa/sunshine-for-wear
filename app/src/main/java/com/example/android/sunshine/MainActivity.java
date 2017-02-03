@@ -396,8 +396,8 @@ public class MainActivity extends AppCompatActivity implements
         // Celsius or Fahrenheit
         dataMap.putString("units", SunshinePreferences.isMetric(this) ? "C" : "F");
         // temperature
-        dataMap.putInt("high", weatherCursor.getInt(INDEX_WEATHER_MAX_TEMP));
-        dataMap.putInt("low", weatherCursor.getInt(INDEX_WEATHER_MIN_TEMP));
+        dataMap.putDouble("high", weatherCursor.getDouble(INDEX_WEATHER_MAX_TEMP));
+        dataMap.putDouble("low", weatherCursor.getDouble(INDEX_WEATHER_MIN_TEMP));
         // weather type
         dataMap.putInt("type", weatherCursor.getInt(INDEX_WEATHER_CONDITION_ID));
 

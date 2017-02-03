@@ -66,8 +66,8 @@ public class WatchFace extends CanvasWatchFaceService {
 
     // weather data to be displayed on the screen
     public static String units = "C";
-    public static int high = 0;
-    public static int low = 0;
+    public static double high = 0;
+    public static double low = 0;
     public static Integer type = null;
     // color to be shown on bottom half of screen
     public static Integer tempColor = null;
@@ -347,9 +347,9 @@ public class WatchFace extends CanvasWatchFaceService {
                     mDateAndTempPaint);
 
             mDateAndTempPaint.setColor(resources.getColor(R.color.white));
-            String tempText = String.format("%d / %d °%s",
-                    high,
-                    low,
+            String tempText = String.format("%s / %s °%s",
+                    String.format(WatchFace.this.getString(R.string.format_temperature), high),
+                    String.format(WatchFace.this.getString(R.string.format_temperature), low),
                     units);
             canvas.drawText(tempText,
                     bounds.width()/2,
